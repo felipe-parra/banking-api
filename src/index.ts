@@ -1,9 +1,22 @@
-import { Hono } from 'hono'
+import { Env, Hono } from "hono";
+import { appUser } from "./users";
+import { appBelvo } from "./belvo";
+import { cors } from "hono/cors";
 
-const app = new Hono()
+const mainApp = new Hono().basePath("/api/v1");
 
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
+mainApp.use(
+  cors({
+    origin: "*",
+  })
+);
 
-export default app
+mainApp.route("/users", appUser);
+
+mainApp.route("/belvo", appBelvo);
+
+export default {
+  fetch(request: Request, env: Env, ctx: ExecutionContext) {
+    return mainApp.fetch(request, env, ctx);
+  },
+};
