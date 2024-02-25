@@ -1,0 +1,24 @@
+name = "banking-api"
+compatibility_date = "2023-12-01"
+
+[vars]
+SUPABASE_PROJECT_URL=<SUPABASE_PROJECT_URL>
+SUPABASE_API_KEY=<SUPABASE_API_KEY>
+SUPABASE_DATABASE_PASSWORD=<SUPABASE_DATABASE_PASSWORD>
+BELVO_SECRET_KEY_ID=<BELVO_SECRET_KEY_ID>
+BELVO_SECRET_PASSWORD=<BELVO_SECRET_PASSWORD>
+BELVO_BASE_URL=<BELVO_BASE_URL>
+
+
+# [[kv_namespaces]]
+# binding = "MY_KV_NAMESPACE"
+# id = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# [[r2_buckets]]
+# binding = "MY_BUCKET"
+# bucket_name = "my-bucket"
+
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "my-database"
+# database_id = ""
