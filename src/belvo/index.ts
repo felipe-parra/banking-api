@@ -6,8 +6,7 @@ import {
   InstitutionResponse,
   TransactionResponse,
 } from "../types/belvo.types";
-import { RegisterLinkType, zRegisterAccountValidator } from "./validator";
-import { findUser } from "../users/service";
+import { zRegisterAccountValidator } from "./validator";
 
 const appBelvo = new Hono();
 
@@ -67,11 +66,6 @@ appBelvo.post("/register-link", zRegisterAccountValidator, async (c) => {
       },
       body: JSON.stringify(body),
     });
-
-    // const supabase = getSupabase(c);
-    // const user = await findUser(supabase, email);
-
-    // const {error} = await supabase.from("users").update({accounts: })
 
     const data = (await response.json()) as CreationLinkResponse;
 
