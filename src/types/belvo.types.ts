@@ -221,3 +221,19 @@ export type AccountResponseType = {
   public_identification_name: string;
   public_identification_value: string;
 };
+
+export type CreationLinkResponse = {
+  id: string;
+  institution: string;
+  access_mode: string;
+  status: string;
+  refresh_rate: null;
+  created_by: string;
+  last_accessed_at: Date;
+  external_id: string;
+  created_at: Date;
+  institution_user_id: string;
+  credentials_storage: string;
+  stale_in: string;
+  fetch_resources: string[];
+};

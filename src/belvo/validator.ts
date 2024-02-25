@@ -1,15 +1,12 @@
 import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
 
-const registerAccountSchema = z.object({
+const registerLinkSchema = z.object({
   institution: z.string(),
   username: z.string(),
   password: z.string(),
 });
 
-export type RegisterAccountType = z.infer<typeof registerAccountSchema>;
+export type RegisterLinkType = z.infer<typeof registerLinkSchema>;
 
-export const zRegisterAccountValidator = zValidator(
-  "form",
-  registerAccountSchema
-);
+export const zRegisterAccountValidator = zValidator("form", registerLinkSchema);

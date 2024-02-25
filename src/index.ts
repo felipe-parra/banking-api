@@ -7,7 +7,7 @@ const mainApp = new Hono().basePath("/api/v1");
 
 mainApp.use(
   cors({
-    origin: "*",
+    origin: ["*"],
   })
 );
 
@@ -15,8 +15,4 @@ mainApp.route("/users", appUser);
 
 mainApp.route("/belvo", appBelvo);
 
-export default {
-  fetch(request: Request, env: Env, ctx: ExecutionContext) {
-    return mainApp.fetch(request, env, ctx);
-  },
-};
+export default mainApp;

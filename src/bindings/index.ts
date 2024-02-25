@@ -6,4 +6,6 @@ export type Bindings = {
   SUPABASE_API_KEY: string;
   JWT_SECRET: string;
   BELVO_BASE_URL: string;
+  SUPABASE_URL: string;
+  SUPABASE_ANON_KEY: string;
 };

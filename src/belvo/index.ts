@@ -1,8 +1,13 @@
 import { Hono } from "hono";
-import { supabaseMiddleware } from "../middleware/subabase";
+import { getSupabase, supabaseMiddleware } from "../middleware/subabase";
 import { config } from "../config";
-import { InstitutionResponse, TransactionResponse } from "../types/belvo.types";
-import { RegisterAccountType, zRegisterAccountValidator } from "./validator";
+import {
+  CreationLinkResponse,
+  InstitutionResponse,
+  TransactionResponse,
+} from "../types/belvo.types";
+import { RegisterLinkType, zRegisterAccountValidator } from "./validator";
+import { findUser } from "../users/service";
 
 const appBelvo = new Hono();
 
@@ -18,7 +23,7 @@ appBelvo.get("/institutions", async (c) => {
     const page = c.req.query("page") ?? 1;
 
     const response = await fetch(
-      `${BELVO_BASE_URL}/api/institutions/?page=${page}`,
+      `${BELVO_BASE_URL}/api/institutions/?page=${page}&type=bank`,
       {
         method: "GET",
         headers: {
@@ -44,15 +49,17 @@ appBelvo.get("/institutions", async (c) => {
   }
 });
 
-appBelvo.post("/register-account", zRegisterAccountValidator, async (c) => {
+appBelvo.post("/register-link", zRegisterAccountValidator, async (c) => {
   try {
     const { BELVO_BASE_URL, BELVO_SECRET_KEY_ID, BELVO_SECRET_PASSWORD } =
       config(c);
     const token = btoa(BELVO_SECRET_KEY_ID + ":" + BELVO_SECRET_PASSWORD);
 
-    const body = await c.req.parseBody<RegisterAccountType>();
+    const body = await c.req.parseBody();
 
-    const response = await fetch(`${BELVO_BASE_URL}/api/links/`, {
+    console.log({ body });
+
+    const response = await fetch(`${BELVO_BASE_URL}/api/links`, {
       method: "POST",
       headers: {
         Authorization: `Basic ${token}`,
@@ -60,8 +67,22 @@ appBelvo.post("/register-account", zRegisterAccountValidator, async (c) => {
       },
       body: JSON.stringify(body),
     });
-    const data = await response.json();
-    console.log({ data });
+
+    // const supabase = getSupabase(c);
+    // const user = await findUser(supabase, email);
+
+    // const {error} = await supabase.from("users").update({accounts: })
+
+    const data = (await response.json()) as CreationLinkResponse;
+
+    if (!data.id) {
+      throw new Error("Something went wrong");
+    }
+    console.log({ data }, data);
+    return c.json({
+      message: "Created link successfully",
+      data: data,
+    });
   } catch (error) {
     return c.json(
       {
@@ -78,18 +99,12 @@ appBelvo.get("/transactions", async (c) => {
       config(c);
     const token = btoa(BELVO_SECRET_KEY_ID + ":" + BELVO_SECRET_PASSWORD);
 
-    const body = await c.req.parseBody();
-
-    const account = await c.req.query("account");
+    const link = await c.req.query("link");
 
     const page = (await c.req.query("page")) || 1;
-    console.log({
-      body,
-      account,
-      page,
-    });
+
     const response = await fetch(
-      `${BELVO_BASE_URL}/api/transactions/?page=${page}&link=${body.link}`,
+      `${BELVO_BASE_URL}/api/transactions/?page=${page}&link=${link}`,
       {
         method: "GET",
         headers: {
@@ -100,7 +115,7 @@ appBelvo.get("/transactions", async (c) => {
     );
 
     const data = (await response.json()) as TransactionResponse;
-    console.log({ data });
+
     return c.json({
       message: "Transactions successfully recovered",
       data: data,
@@ -115,18 +130,18 @@ appBelvo.get("/transactions", async (c) => {
   }
 });
 
-appBelvo.get("/account", async (c) => {
+appBelvo.get("/accounts", async (c) => {
   try {
     const { BELVO_BASE_URL, BELVO_SECRET_KEY_ID, BELVO_SECRET_PASSWORD } =
       config(c);
     const token = btoa(BELVO_SECRET_KEY_ID + ":" + BELVO_SECRET_PASSWORD);
 
-    const body = await c.req.parseBody();
+    const link = await c.req.query("link");
 
     const page = (await c.req.query("page")) || 1;
 
     const response = await fetch(
-      `${BELVO_BASE_URL}/api/accounts/?page=${page}&link=${body.link}`,
+      `${BELVO_BASE_URL}/api/accounts/?page=${page}&link=${link}`,
       {
         method: "GET",
         headers: {

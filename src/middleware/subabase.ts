@@ -12,17 +12,17 @@ export const idCtxSupabase = "supabase-ctx";
  */
 export const supabaseMiddleware: MiddlewareHandler = async (c, next) => {
   try {
-    const { SUPABASE_API_KEY, SUPABASE_PROJECT_URL } = config(c);
+    const { SUPABASE_URL, SUPABASE_ANON_KEY } = config(c);
 
-    if (!SUPABASE_PROJECT_URL && !SUPABASE_API_KEY) {
+    if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
       return c.text("Something happened with environment variables");
     }
 
-    const supabase = createClient(SUPABASE_PROJECT_URL, SUPABASE_API_KEY);
+    const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     c.set(idCtxSupabase, supabase);
 
-    await next();
+    return await next();
   } catch (error) {
     return c.text("Something wen't wrong!!", 400);
   }

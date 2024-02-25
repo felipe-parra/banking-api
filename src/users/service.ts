@@ -7,7 +7,12 @@ export const registerUser = async (
   supabase: SupabaseClient,
   user: UserType
 ): Promise<UserType> => {
-  const { data } = await supabase.from(COLLECTION).insert(user).select("*");
+  const { data } = await supabase
+    .from(COLLECTION)
+    .insert(user)
+    .select()
+    .maybeSingle();
+  console.log("[registered]:", { data });
   return data as unknown as UserType;
 };
 
