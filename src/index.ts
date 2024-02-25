@@ -8,6 +8,8 @@ const mainApp = new Hono().basePath("/api/v1");
 mainApp.use(
   cors({
     origin: ["*"],
+    allowMethods: ["GET", "POST"],
+    allowHeaders: ["*"],
   })
 );
 
