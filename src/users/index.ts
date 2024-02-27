@@ -57,7 +57,11 @@ appUser.post("/register", zUserRegisterValidator, async (c) => {
 
     user.password = "";
 
-    const token = await sign({ email: user.email }, config(c).JWT_SECRET);
+    const token = await sign(
+      { email: user.email },
+      config(c).JWT_SECRET,
+      "HS256"
+    );
 
     return c.json({ user, token }, 201);
   }
@@ -84,9 +88,12 @@ appUser.post("/login", zUserLoginValidator, async (c) => {
   }
 
   user.password = "";
-  const token = await sign({ email: user.email }, config(c).JWT_SECRET);
 
-  console.log({ token });
+  const token = await sign(
+    { email: user.email },
+    config(c).JWT_SECRET,
+    "HS256"
+  );
 
   return c.json({ user, token }, 200);
 });
