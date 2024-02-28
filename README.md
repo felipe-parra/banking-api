@@ -2,6 +2,15 @@
 
 This project is the API to connect with Belvo
 
+## Tech Stack 
+
+- Typescript
+- Hono
+- Supabase 
+- Cloudflare Workers
+- Zod 
+
+
 ## Run Locally
 
 Easily you con run this project following next steps:
