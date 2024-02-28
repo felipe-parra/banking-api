@@ -5,6 +5,8 @@ const schemaUser = z.object({
   name: z.string(),
   email: z.string().email(),
   password: z.string(),
+  accounts: z.string().optional(),
+  id: z.string().optional(),
 });
 
 export const schemaLoginUser = z.object({

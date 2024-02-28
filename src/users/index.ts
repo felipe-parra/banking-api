@@ -11,6 +11,7 @@ import { comparePassword, hashPassword } from "../utils";
 import { sign } from "hono/jwt";
 import { config } from "../config";
 import { InstitutionResponse } from "../types/belvo.types";
+import { Jwt } from "hono/utils/jwt";
 
 const appUser = new Hono();
 
@@ -18,7 +19,6 @@ appUser.use("*", supabaseMiddleware);
 
 appUser.get("/", async (c) => {
   try {
-    console.log("Init");
     const supabase = getSupabase(c);
 
     const { data: users, error } = await supabase.from("users").select();

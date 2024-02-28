@@ -22,9 +22,23 @@ export const findUser = async (
 ): Promise<UserType | null> => {
   const { data } = await supabase
     .from(COLLECTION)
-    .select()
+    .select("*")
     .eq("email", email)
     .maybeSingle();
+
+  return data as unknown as UserType;
+};
+
+export const updateUser = async (
+  supabase: SupabaseClient,
+  userId: string,
+  updates: Partial<UserType>
+): Promise<UserType | null> => {
+  const { data } = await supabase
+    .from(COLLECTION)
+    .update(updates)
+    .eq("id", userId)
+    .single();
 
   return data as unknown as UserType;
 };

@@ -43,3 +43,20 @@ npm run dev
 # Example
 http://localhost:8787
 ```
+
+### Endpoints
+
+This is the list of Endpoints availables
+
+```sh
+# Users
+/api/v1/users/login - POST
+/api/v1/users/register - POST
+
+# Belvo
+/api/v1/belvo/institutions - GET - Query page
+/api/v1/belvo/transactions - GET - Query page
+/api/v1/belvo/accounts - GET - Query page
+/api/v1/users/register-link - POST
+
+```
